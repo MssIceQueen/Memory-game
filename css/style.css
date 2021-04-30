@@ -1,0 +1,44 @@
+body {
+    background-image: url("../images/frontface.2.jpg");
+    background-position: center;
+    opacity: 90%;
+}
+header{
+    text-align: center;
+    font-family: "Baskerville Old Face";
+    color: whitesmoke;
+}
+
+p{
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.memory-card {
+    width: 300px;
+    height: 500px;
+}
+/* This container is needed to position the front and back side */
+.memory-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+/* Position the front and back side */
+.back-face, .front-face{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+.front-face {
+    transform: rotateY(180deg);
+}
+
+.memory-card.flip {
+    transform: rotateY(180deg);
+}
