@@ -31,27 +31,71 @@ Let a user define custom image urls
 Make it pleasing to look at
 Multiplayer (local) */
 
-let cards = document.getElementsByClassName("memory-card");
-let cards = [...card];
+// to get all the memory cards from the html doc
+let cards = Array.from(document.getElementsByClassName("memory-card"));
 
-for (let i = 0; i < cards.length; i++){
-    cards[i].addEventListener("click", displayCard);
-};
-//displayCard is a function we'll talk about this soon
+//created var to add conditions
+let isFlipped,isLocked = false;
+let cardOne, cardTwo;
 
-/*
+// what the cards need to do once they are clicked
+function flipCard() {
+    if (isLocked || this === cardOne) return;
 
-<div class="flip-card">
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">
-    </div>
-    <div class="flip-card-back">
-      <h1>John Doe</h1>
-      <p>Architect & Engineer</p>
-      <p>We love that guy</p>
-    </div>
-  </div>
-</div>
+    this.classList.add('flip');
 
- */
+    if (!isFlipped) {
+        isFlipped = true;
+        cardOne = this;
+        return;
+    }
+
+    cardTwo = this;
+
+    checkForMatch();
+}
+// to check if the cards that are clicked are a match
+function checkForMatch() {
+    if (cardOne.dataset.frame === cardTwo.dataset.frame)
+    {
+        disableCards();
+        return;
+    }
+    unFlipCards();
+}
+// to disable the cards when they are not a match
+function disableCards() {
+    cardOne.removeEventListener('click', flipCard);
+    cardTwo.removeEventListener('click', flipCard);
+
+    resetTurn();
+}
+// to flip the cards back that are not a match
+function unFlipCards() {
+    isLocked = true;
+
+    setTimeout(() => {
+        cardOne.classList.remove('flip');
+        cardTwo.classList.remove('flip');
+
+        resetTurn();
+    }, 1500)
+}
+
+(function shuffle() {
+    cards.forEach(card => {
+        let rand = Math.floor(Math.random() * 4);
+        card.style.order = rand.toString();
+    });
+})();
+
+
+function resetTurn() {
+    isFlipped = false;
+    isLocked = false;
+    cardOne = null;
+    cardTwo = null;
+}
+
+// to add the click function
+cards.forEach(card => card.addEventListener('click', flipCard));
